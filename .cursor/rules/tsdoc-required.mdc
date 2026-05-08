@@ -1,0 +1,31 @@
+---
+description: sqlite-promiser library — TSDoc for TypeDoc (public API documentation)
+globs: packages/sqlite-promiser/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# TSDoc for `packages/sqlite-promiser` (TypeDoc)
+
+Keep **exported** APIs documented in source so `pnpm docs:ref` produces a useful HTML reference (`packages/sqlite-promiser/docs/reference`).
+
+## Applies to
+
+- **Exported** functions, classes, enums, constants
+- **`export type` / `export interface`** (summary + notable members; **`Database`**-style APIs: doc each callable member)
+- **Barrel entry files** (`src/index.ts`, `src/react.ts`, `src/headers.ts`, `public-api.ts`, `react/public-api.ts`, `src/node.ts`): module intro with `@module …` plus one short paragraph on purpose/import path
+- **`@inheritDoc`** on thin re-exports when the canonical doc lives on the implementation symbol (`src/node.ts` pattern)
+
+Use **`@internal`** to omit implementation helpers from TypeDoc.
+
+## Minimum content per symbol
+
+1. Summary line — user-facing intent.
+2. Extra paragraph when behavior is non-obvious (OPFS vs memory, queueing, browser-only stubs, Strict Mode caching, COOP/COEP, etc.).
+3. **`@param`** / **`@returns`** where signatures need explanation (omit when obvious).
+4. **`@throws {@link SqliteWasmError}`** (or `{@link Error}`) when failure is contractual.
+5. **`{@link OtherSymbol}`** to cross-link types and factories (`createDatabase`, `describeEnvironment`, `OpenOptions`, etc.) — improves TypeDoc navigation.
+
+## After API or doc-comment changes
+
+- Regenerate docs: **`pnpm docs:ref`** from the repo root (or `pnpm docs:ref` in `packages/sqlite-promiser`).
+- ESLint skips **`packages/sqlite-promiser/docs/reference/**`**; do not hand-edit generated files.

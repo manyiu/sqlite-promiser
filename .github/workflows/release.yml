@@ -1,0 +1,66 @@
+# Commit-message driven releases on `main` (Conventional Commits + semantic-release).
+#
+# Secret: NPM_TOKEN — must be able to publish `sqlite-promiser`.
+#   - Before the package exists: use a Classic "Automation" token, or a Granular token with
+#     Publish to "All packages" (or your user scope), then narrow to this package after the first publish.
+#   - Package-specific-only tokens may be unavailable until after one successful `npm publish`.
+#
+# Bootstrap (common):
+#   1) `pnpm --filter sqlite-promiser build` then `npm publish --access public` from `packages/sqlite-promiser` (local login), OR
+#   2) Add NPM_TOKEN as above and let this workflow run semantic-release (first release still needs a sane git tag baseline).
+#
+# Baseline tag: `git tag v0.1.0` (match package.json) before automation so history isn’t treated as one giant first bump.
+
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: semantic-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Avoid re-running lint/test/release when semantic-release pushes the changelog bump (`[skip ci]`).
+    if: ${{ github.event.head_commit == null || !contains(github.event.head_commit.message, '[skip ci]') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Enable Corepack (pnpm version from package.json)
+        run: corepack enable pnpm
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install workspace
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (library)
+        run: pnpm --filter sqlite-promiser lint
+
+      - name: Test (library)
+        run: pnpm --filter sqlite-promiser test
+
+      - name: Build (library, before npm pack)
+        run: pnpm --filter sqlite-promiser build
+
+      - name: Semantic release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm exec semantic-release

@@ -1,0 +1,61 @@
+# === OS / Editor ===
+.DS_Store
+.DS_Store?
+Thumbs.db
+*.swp
+*.swo
+*.orig
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# === Logs ===
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# === Dependencies ===
+node_modules/
+
+# pnpm
+.pnpm-store/
+
+# === Build outputs ===
+dist/
+build/
+out/
+
+# TypeDoc (generated API reference; run `pnpm docs:ref` to produce)
+packages/sqlite-promiser/docs/reference/
+
+# Next.js
+.next/
+
+# Vite / Rollup / misc caches
+.vite/
+.cache/
+
+# TypeScript
+*.tsbuildinfo
+
+# === Testing / coverage ===
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# === Environment files ===
+.env
+.env.*
+!.env.example
+
+# === Misc ===
+.turbo/
+.vercel/

@@ -1,0 +1,31 @@
+{
+  "name": "sqlite-wasm-opfs-workspace",
+  "private": true,
+  "packageManager": "pnpm@11.0.8",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "release": "semantic-release",
+    "release:dry": "semantic-release --dry-run",
+    "docs:ref": "pnpm --filter sqlite-promiser docs:ref",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "test:e2e": "pnpm --filter sqlite-promiser build && pnpm --filter sqlite-promiser test:e2e",
+    "dev:example": "pnpm --filter example-vite dev"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.6",
+    "@semantic-release/npm": "^13.1.5",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "conventional-changelog-conventionalcommits": "^9.3.1",
+    "semantic-release": "^25.0.3"
+  }
+}

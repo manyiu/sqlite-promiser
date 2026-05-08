@@ -1,0 +1,92 @@
+{
+  "name": "sqlite-promiser",
+  "version": "0.1.0",
+  "description": "Async SQLite WASM with OPFS persistence (with safe fallbacks) for frontend apps.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manyiu/sqlite-promiser.git",
+    "directory": "packages/sqlite-promiser"
+  },
+  "bugs": {
+    "url": "https://github.com/manyiu/sqlite-promiser/issues"
+  },
+  "homepage": "https://github.com/manyiu/sqlite-promiser#readme",
+  "keywords": [
+    "sqlite",
+    "wasm",
+    "opfs",
+    "browser",
+    "react",
+    "nextjs",
+    "vite"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "node": {
+        "import": "./dist/node.js",
+        "require": "./dist/node.cjs",
+        "default": "./dist/node.js"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js",
+      "require": "./dist/react.cjs",
+      "default": "./dist/react.js"
+    },
+    "./headers": {
+      "types": "./dist/headers.d.ts",
+      "import": "./dist/headers.js",
+      "require": "./dist/headers.cjs",
+      "default": "./dist/headers.js"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "lint": "eslint .",
+    "docs:ref": "typedoc",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@playwright/test": "^1.52.0",
+    "@types/react": "^19.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.33.0",
+    "@typescript-eslint/parser": "^8.33.0",
+    "@sqlite.org/sqlite-wasm": "^3.53.0-build1",
+    "eslint": "^9.29.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "playwright": "^1.52.0",
+    "typedoc": "^0.28.13",
+    "tsup": "^8.1.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.59.2",
+    "vitest": "^3.2.0"
+  },
+  "peerDependencies": {
+    "@sqlite.org/sqlite-wasm": ">=3.45.0-0",
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  }
+}

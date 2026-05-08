@@ -1,0 +1,23 @@
+{
+  "name": "example-nextjs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "assets": "node ./scripts/copy-sqlite-wasm-assets.mjs",
+    "dev": "pnpm assets && next dev",
+    "build": "pnpm assets && next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@sqlite.org/sqlite-wasm": "^3.53.0-build1",
+    "next": "^15.3.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "sqlite-promiser": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "20.17.6",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0"
+  }
+}
