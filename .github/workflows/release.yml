@@ -1,15 +1,14 @@
 # Commit-message driven releases on `main` (Conventional Commits + semantic-release).
 #
-# Secret: NPM_TOKEN — must be able to publish `sqlite-promiser`.
-#   - Before the package exists: use a Classic "Automation" token, or a Granular token with
-#     Publish to "All packages" (or your user scope), then narrow to this package after the first publish.
-#   - Package-specific-only tokens may be unavailable until after one successful `npm publish`.
+# npm publish uses Trusted Publishing (OIDC) — no NPM_TOKEN in this workflow.
+#   - On npmjs.com → package → Settings → Trusted Publisher: GitHub Actions, this repo, and this
+#     workflow filename must match exactly (case-sensitive): `release.yml`.
+#   - Requires GitHub-hosted runners and workflow permission `id-token: write` (below).
+#   - `@semantic-release/npm` exchanges the GitHub Actions OIDC token for a short-lived publish token.
 #
-# Bootstrap (common):
-#   1) `pnpm --filter sqlite-promiser build` then `npm publish --access public` from `packages/sqlite-promiser` (local login), OR
-#   2) Add NPM_TOKEN as above and let this workflow run semantic-release (first release still needs a sane git tag baseline).
+# Local / manual publishes use `npm publish` with your npm account (OTP or token as you configure).
 #
-# Baseline tag: `git tag v0.1.0` (match package.json) before automation so history isn’t treated as one giant first bump.
+# Baseline `v*` git tags keep semantic-release history sane (avoid one giant first automated bump).
 
 name: Release
 
@@ -20,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write # OIDC for npm Trusted Publishing (semantic-release → npm)
   issues: write
   pull-requests: write
 
@@ -44,7 +44,8 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          # Trusted publishing: npm requires Node >= 22.14 (see npm docs)
+          node-version: '22.14'
           cache: 'pnpm'
 
       - name: Install workspace
@@ -62,5 +63,4 @@ jobs:
       - name: Semantic release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm exec semantic-release

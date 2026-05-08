@@ -5,9 +5,9 @@
  * - Baseline git tag `v*` matching `packages/sqlite-promiser` `version` (e.g. `v0.1.0`) before relying on automation,
  *   so the first bump isn’t derived from the entire repo history.
  *
- * Secrets (workflow):
- * - `NPM_TOKEN`: must allow publishing `sqlite-promiser`. Until the name exists on npm, use a Classic
- *   Automation token or a Granular token with Publish (e.g. all packages); restrict to this package after the first publish.
+ * npm publishing (CI):
+ * - GitHub Actions uses npm Trusted Publishing (OIDC). No `NPM_TOKEN` — see `.github/workflows/release.yml`.
+ * - `@semantic-release/npm` performs the OIDC token exchange when `id-token: write` is granted.
  */
 
 /** @type {import('semantic-release').GlobalConfig} */
