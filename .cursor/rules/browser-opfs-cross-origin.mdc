@@ -1,0 +1,12 @@
+---
+description: Browser SQLite WASM — OPFS, cross-origin isolation, workers, fallbacks
+globs: packages/sqlite-promiser/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# OPFS, isolation, and sqlite-wasm
+
+- **Persistence**: OPFS needs a **cross-origin isolated** context; document or preserve **COOP/COEP** behavior when touching persistence or environment detection helpers.
+- **Fallbacks**: The library favors **OPFS when available** and **safe in-memory fallback** otherwise — behavior changes around `preferOpfs`, environment probing, or open paths affect real apps; call out breaking semantics in commits/docs.
+- **Worker / WASM**: Respect how **`@sqlite.org/sqlite-wasm`** loads (workers, messaging). Avoid coupling app code to internal worker assumptions unless encapsulated in this package.
+- **Framework notes**: Examples (Vite/Next) may need **`optimizeDeps.exclude`** (or equivalent) for sqlite-wasm — keep README and configs aligned when behavior changes.

@@ -1,0 +1,13 @@
+---
+description: sqlite-promiser repo — pnpm workspace commands and package layout
+alwaysApply: true
+---
+
+# pnpm workspace
+
+- **Install**: From repo root, `pnpm install` (frozen lockfile in CI: `pnpm install --frozen-lockfile`).
+- **Package manager**: Prefer **pnpm only** (`package.json` declares `pnpm@11`).
+- **Library package**: Published code lives under `packages/sqlite-promiser`. Target it with `pnpm --filter sqlite-promiser <script>` (e.g. `lint`, `test`, `build`, `docs:ref`, `test:e2e`).
+- **Workspace-wide**: Root scripts `pnpm build`, `pnpm test`, `pnpm lint` run recursively (`pnpm -r`).
+- **Do not commit** hand-edited `packages/sqlite-promiser/dist/**` unless your workflow explicitly requires it; build output is derived.
+- **E2E from root**: `pnpm test:e2e` builds the library then runs Playwright tests in that package.

@@ -1,0 +1,12 @@
+---
+description: sqlite-promiser — Vitest unit tests and Playwright E2E
+globs: packages/sqlite-promiser/**
+alwaysApply: false
+---
+
+# Tests
+
+- **Unit tests**: `pnpm --filter sqlite-promiser test` (Vitest).
+- **E2E**: From repo root, `pnpm test:e2e` (builds library + Playwright in `sqlite-promiser`); or `pnpm --filter sqlite-promiser test:e2e` after a fresh build when iterating.
+- **CI alignment**: `.github/workflows/release.yml` runs **lint**, **unit test**, **build**, then semantic-release — match that bar before treating work as merge-ready.
+- Add or adjust tests when changing **serialization across worker boundaries**, **OPFS/memory branching**, **React hooks**, or **public APIs**.

@@ -1,0 +1,11 @@
+---
+description: examples/ — align Vite and Next demos with sqlite-promiser API and README
+globs: examples/**/*
+alwaysApply: false
+---
+
+# Examples (`examples/`)
+
+- Keep **import paths**, **COOP/COEP / header presets**, and **vite/next config patterns** consistent with **`README.md`** and the published **`sqlite-promiser`** API.
+- When the library gains new entry points or options, update examples only if they **demonstrate real usage**; avoid dead or misleading snippets.
+- Run example apps locally when changing behavior affecting bundlers (**`pnpm --filter example-vite dev`**, **`example-nextjs`** equivalents from root/package scripts).

@@ -1,0 +1,26 @@
+---
+description: When to use babysit vs split-to-prs Cursor skills in this repo
+alwaysApply: true
+---
+
+# Cursor skills for this repo
+
+Use the bundled Cursor skills explicitly when these situations match:
+
+## Babysit (merge-ready PR / CI upkeep)
+
+Invoke the **babysit** skill when:
+
+- Fixing **failing CI** or release checks tied to **`sqlite-promiser`**
+- Triage-ing **review comments** and iterating until merge-ready
+
+Follow that skill end-to-end (iterate lint/test/build/release expectations as documented there).
+
+## Split to PRs
+
+Invoke the **split-to-prs** skill when:
+
+- One branch mixes **library + examples + workflows + changelog-like noise**
+- Reviews would be clearer as **small, sequential PRs** (API vs docs vs infra)
+
+Follow that skill’s workflow rather than stuffing unrelated concerns into a single merge.

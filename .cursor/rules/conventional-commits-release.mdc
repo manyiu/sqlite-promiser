@@ -1,0 +1,12 @@
+---
+description: Semantic-release on main — Conventional Commits and release workflow
+alwaysApply: true
+---
+
+# Commits and releases
+
+- Releases are driven by **[Conventional Commits](https://www.conventionalcommits.org/)** via **semantic-release** on push to `main` (`pnpm exec semantic-release`).
+- Use prefixes such as **`fix:`**, **`feat:`**, **`perf:`**, **`docs:`**, **`chore:`** so version bumps and changelogs stay correct.
+- **Breaking changes**: document in commit body/footer as **`BREAKING CHANGE:`** (or use `feat!:` / `fix!:`) so major bumps are intentional.
+- The release workflow skips runs when the pushed commit message contains **`[skip ci]`** (e.g. post-release changelog bump). Prefer that convention for chores that must not re-trigger the whole pipeline.
+- **PR discipline**: Prefer squash merge messages that semantic-release will see on `main`, or merge commits whose **final message on main** stays conventional — align with whatever merge strategy your team uses.

@@ -1,0 +1,12 @@
+---
+description: sqlite-promiser — public API surface, exports, semver and peers
+globs: packages/sqlite-promiser/**/*.{ts,tsx,json}
+alwaysApply: false
+---
+
+# Public API and `exports`
+
+- Treat **`packages/sqlite-promiser/package.json`** `exports` / `main` / `module` / `types` as a **semver contract**. Adding or renaming entry points (`./react`, `./headers`, conditional **`node`**) is a **user-facing** change — plan **minor/major** and changelog notes.
+- **Peer dependencies**: `@sqlite.org/sqlite-wasm` (required range), `react` (optional). Avoid tightening ranges without a strong reason; document breaking peer expectations in commits when you do.
+- After export or build-entry changes, run **`pnpm --filter sqlite-promiser build`** and ensure consumers still resolve **`sqlite-promiser`**, **`sqlite-promiser/react`**, **`sqlite-promiser/headers`**.
+- Prefer **`sideEffects: false`** — avoid introducing side-effectful modules that defeat tree-shaking without updating `package.json` intentionally.
