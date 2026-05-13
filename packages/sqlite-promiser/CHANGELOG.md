@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/manyiu/sqlite-promiser/compare/v1.0.0...v1.0.1) (2026-05-13)
+
+### Bug Fixes
+
+* **ci:** restore npm Trusted Publishing for semantic-release ([06bc73f](https://github.com/manyiu/sqlite-promiser/commit/06bc73f5a14893fd95dadfe0a47568d251e38165))
+
 ## 1.0.0 (2026-05-13)
 
 ### ⚠ BREAKING CHANGES
