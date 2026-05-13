@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/manyiu/sqlite-promiser/compare/v1.0.1...v1.0.2) (2026-05-13)
+
+### Bug Fixes
+
+* **example-vite:** default VITE_COOP=1 so dev runs with OPFS ([c5b0306](https://github.com/manyiu/sqlite-promiser/commit/c5b0306725487991a0ef55987e72dd32b609ed0f))
+* ship OPFS async proxy with OO1 worker and harden Vite docs ([479d5a9](https://github.com/manyiu/sqlite-promiser/commit/479d5a9c340f115fe683cd9c0580adaabf94b6eb))
+
 ## [1.0.1](https://github.com/manyiu/sqlite-promiser/compare/v1.0.0...v1.0.1) (2026-05-13)
 
 ### Bug Fixes
