@@ -79,7 +79,7 @@ Use `describeEnvironment()` in UI to explain why storage is in-memory.
 
 ### Vite
 
-[`examples/example-vite`](../../examples/example-vite) uses **`sqlite-promiser/vite`** so COOP/COEP and optional dev origin stay in one place.
+[`examples/example-vite`](../../examples/example-vite) uses **`sqlite-promiser/vite`** so COOP/COEP and optional dev origin stay in one place. Its `dev` / `preview` scripts set **`VITE_COOP=1`** by default so the page is cross-origin isolated and OPFS can run; use **`VITE_COOP=0 pnpm dev`** locally if you want to exercise the in-memory fallback.
 
 - **`VITE_COOP=1`** — applies `requireCorp` headers to `server` and `preview`.
 - **`VITE_COOP_POLICY=credentialless`** — use with `VITE_COOP=1` to apply `credentialless` instead.

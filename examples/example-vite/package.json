@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "prebuild": "pnpm --filter sqlite-promiser build",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "VITE_COOP=1 vite",
+    "build": "VITE_COOP=1 vite build",
+    "preview": "VITE_COOP=1 vite preview"
   },
   "dependencies": {
     "@sqlite.org/sqlite-wasm": "^3.53.0-build1",
