@@ -33,6 +33,19 @@ export default defineConfig([
     outDir: 'dist',
     dts: false,
     noExternal: ['@sqlite.org/sqlite-wasm']
+  },
+  {
+    entry: { 'vite-plugin': 'src/vite/plugin.ts' },
+    format: ['esm'],
+    platform: 'node',
+    target: 'es2022',
+    sourcemap: true,
+    clean: false,
+    splitting: false,
+    treeshake: true,
+    outDir: 'dist',
+    dts: true,
+    external: ['vite']
   }
 ]);
 

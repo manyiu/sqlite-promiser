@@ -41,9 +41,14 @@ export type OpenOptions = {
    */
   vfs?: string;
   /**
-   * Optional explicit worker (advanced). It must load the same OO1 RPC worker
-   * as the library default: resolve `sqlite-promiser/worker` (or copy `dist/sqlite-oo1-worker.js`)
-   * and use `new Worker(url, { type: 'module' })`, optionally with `?sqlite3.wasm=` for WASM location.
+   * Optional explicit worker (advanced). It must load the **same OO1 RPC bundle** as the library
+   * default (e.g. `new Worker(new URL('sqlite-promiser/worker', import.meta.url), { type: 'module' })`
+   * or a `?url` import resolved under your dev server). That keeps `import.meta.url` in the worker
+   * aligned with sibling static assets. Optionally add `?sqlite3.wasm=` for a custom WASM URL.
+   *
+   * SQLite WASM still spawns an internal **OPFS async helper worker** when using the OPFS VFS; you
+   * cannot remove that nested worker without changing upstream. Publishing ships
+   * `sqlite3-opfs-async-proxy.js` next to `sqlite-oo1-worker.js` so that nested `Worker` URL resolves.
    */
   worker?: Worker | (() => Worker);
 };

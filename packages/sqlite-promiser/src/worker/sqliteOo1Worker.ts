@@ -116,12 +116,12 @@ function closeDb(db: any, alsoUnlink: boolean) {
   const id = getDbId(db);
   delete dbs[id];
   const filename = db.filename;
-  const util = sqlite3.util;
-  const pVfs = util.sqlite3__wasm_db_vfs(db.pointer, 0);
+  const capi = sqlite3.capi;
+  const pVfs = capi.sqlite3_js_db_vfs(db.pointer, 0);
   db.close();
   const ix = dbList.indexOf(db);
   if (ix >= 0) dbList.splice(ix, 1);
-  if (alsoUnlink && filename && pVfs) util.sqlite3__wasm_vfs_unlink(pVfs, filename);
+  if (alsoUnlink && filename && pVfs) capi.sqlite3__wasm_vfs_unlink(pVfs, filename);
   return { filename };
 }
 
