@@ -4,6 +4,7 @@
 #   - On npmjs.com → package → Settings → Trusted Publisher: GitHub Actions, this repo, and this
 #     workflow filename must match exactly (case-sensitive): `release.yml`.
 #   - Requires GitHub-hosted runners and workflow permission `id-token: write` (below).
+#   - npm CLI must be >= 11.5.1 for OIDC (bundled with Node 24 LTS; no separate npm upgrade step).
 #   - `@semantic-release/npm` exchanges the GitHub Actions OIDC token for a short-lived publish token.
 #
 # Local / manual publishes use `npm publish` with your npm account (OTP or token as you configure).
@@ -44,8 +45,8 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          # Trusted publishing: npm requires Node >= 22.14 (see npm docs)
-          node-version: '22.14'
+          # Active Node LTS (includes npm >= 11.5.1 for Trusted Publishing OIDC).
+          node-version: 'lts/*'
           cache: 'pnpm'
 
       - name: Install workspace

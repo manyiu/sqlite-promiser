@@ -1,7 +1,7 @@
 {
   "name": "sqlite-wasm-opfs-workspace",
   "private": true,
-  "packageManager": "pnpm@11.0.8",
+  "packageManager": "pnpm@11.1.1",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
