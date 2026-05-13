@@ -7,7 +7,7 @@
  *
  * npm publishing (CI):
  * - GitHub Actions uses npm Trusted Publishing (OIDC). No `NPM_TOKEN` — see `.github/workflows/release.yml`.
- * - Requires **npm CLI ≥ 11.5.1** (Node 24 LTS bundles npm 11.x; CI uses `lts/*`).
+ * - Requires **npm CLI ≥ 11.5.1** (Node 24.x bundles npm 11.x; CI uses `node-version: '24'`).
  * - `@semantic-release/npm` performs the OIDC token exchange when `id-token: write` is granted.
  */
 
