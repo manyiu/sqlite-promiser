@@ -18,7 +18,7 @@ export type ExecOptions = {
 /**
  * Arguments for {@link createDatabase}.
  *
- * `name` is sanitized for safe use inside Worker1 URI strings when building OPFS or memory filenames.
+ * `name` is sanitized for safe use in OPFS / in-memory URI strings when building filenames.
  */
 export type OpenOptions = {
   /**
@@ -36,13 +36,14 @@ export type OpenOptions = {
    */
   fallback?: 'memory';
   /**
-   * Override SQLite VFS name passed to Worker1 `open` (advanced).
+   * Override SQLite VFS name passed to the worker `open` step (advanced).
    * Example: `'opfs'` when using a filename without `?vfs=` in the URI.
    */
   vfs?: string;
   /**
-   * Optional explicit worker instance (advanced). If provided, it must be a
-   * module worker capable of importing `@sqlite.org/sqlite-wasm` worker entry.
+   * Optional explicit worker (advanced). It must load the same OO1 RPC worker
+   * as the library default: resolve `sqlite-promiser/worker` (or copy `dist/sqlite-oo1-worker.js`)
+   * and use `new Worker(url, { type: 'module' })`, optionally with `?sqlite3.wasm=` for WASM location.
    */
   worker?: Worker | (() => Worker);
 };
@@ -61,12 +62,13 @@ export type DatabaseDiagnostics = {
   vfs: string;
   /** Connection filename/URI fragment used when opening (may include `vfs=` query params). */
   filename: string;
-  /** Stable id used by Worker1 routing for this DB handle. */
+  /** Opaque connection id used for worker RPC routing. */
   dbId: string;
 };
 
 /**
- * Async SQLite handle backed by `@sqlite.org/sqlite-wasm` Worker1.
+ * Async SQLite handle backed by `@sqlite.org/sqlite-wasm` in a dedicated worker
+ * (`sqlite3InitModule()` + OO API #1), not the deprecated Worker1 promiser.
  *
  * All mutating operations are queued on a single in-order chain so callers never interleave statements on the worker.
  */

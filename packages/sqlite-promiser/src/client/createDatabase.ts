@@ -1,26 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any -- Worker1 promiser messages are loosely typed upstream */
+/* eslint-disable @typescript-eslint/no-explicit-any -- worker RPC payloads are loosely typed upstream */
 import type { RowObject, Database, DatabaseDiagnostics, OpenOptions } from '../types.js';
 import { toSqliteWasmError } from '../errors.js';
 import { describeEnvironment } from '../capabilities/describeEnvironment.js';
 import { buildOpenArgs } from './buildOpenArgs.js';
+import { createOo1WorkerPromiser } from './createOo1WorkerPromiser.js';
 
-type Worker1Promiser = (type: string, args: any) => Promise<any>;
+type Promiser = (type: string, args: any) => Promise<any>;
 
-async function createWorker1Promiser(config: any): Promise<Worker1Promiser> {
-  /**
-   * We intentionally avoid importing `sqlite3Worker1Promiser` as a *named* export
-   * because some bundlers (notably Next.js/webpack) will validate named exports
-   * against a "node" resolution during compilation.
-   *
-   * Dynamic import + property access avoids that static export validation while
-   * still working correctly in the browser bundle.
-   */
-  const mod: any = await import('@sqlite.org/sqlite-wasm');
-  const factory = mod?.sqlite3Worker1Promiser;
-  if (typeof factory !== 'function') {
-    throw new Error('Failed to load sqlite3Worker1Promiser from @sqlite.org/sqlite-wasm');
-  }
-  return (await factory(config)) as Worker1Promiser;
+function defaultOo1Worker(): Worker {
+  return new Worker(new URL('./sqlite-oo1-worker.js', import.meta.url), { type: 'module' });
 }
 
 type OpenResult = {
@@ -38,7 +26,9 @@ function deriveMode(r: OpenResult): DatabaseDiagnostics['mode'] {
 }
 
 /**
- * Open an async SQLite database in the browser via Worker1 + `@sqlite.org/sqlite-wasm`.
+ * Open an async SQLite database in a dedicated worker using `sqlite3InitModule()` + OO API #1
+ * (`@sqlite.org/sqlite-wasm`), following https://sqlite.org/wasm/doc/trunk/api-index.md#loading
+ * instead of the deprecated Worker1 promiser.
  *
  * When {@link describeEnvironment} reports cross-origin isolation and OPFS, and `preferOpfs` is not `false`,
  * the library tries an OPFS-backed URI first. If open fails or the environment lacks OPFS, it can fall back
@@ -46,7 +36,7 @@ function deriveMode(r: OpenResult): DatabaseDiagnostics['mode'] {
  *
  * @param opts Name, persistence preference, optional custom worker, and advanced VFS overrides.
  * @returns A fully initialized {@link Database} handle sharing a single serialized command queue.
- * @throws {@link SqliteWasmError} When promiser bootstrap or `open` fails irrecoverably.
+ * @throws {@link SqliteWasmError} When worker bootstrap or `open` fails irrecoverably.
  */
 export async function createDatabase(opts: OpenOptions): Promise<Database> {
   const preferOpfs = opts.preferOpfs ?? true;
@@ -55,12 +45,12 @@ export async function createDatabase(opts: OpenOptions): Promise<Database> {
   const env = describeEnvironment();
   const shouldTryOpfs = preferOpfs && env.crossOriginIsolated && env.opfsAvailable;
 
-  const promiser: Worker1Promiser = await createWorker1Promiser({
-    worker: opts.worker,
+  const promiser: Promiser = await createOo1WorkerPromiser({
+    worker: opts.worker ?? defaultOo1Worker,
     onerror: (...args: unknown[]) => {
       console.error('[sqlite-promiser] worker error', ...args);
     }
-  } as any);
+  });
 
   let openArgs = buildOpenArgs(opts, shouldTryOpfs);
 
@@ -97,21 +87,16 @@ export async function createDatabase(opts: OpenOptions): Promise<Database> {
   };
 
   const execRows = async <T extends RowObject>(sql: string, bind?: unknown): Promise<T[]> => {
-    const rows: T[] = [];
-    await promiser('exec', {
+    const msg = await promiser('exec', {
       dbId,
       sql,
       bind,
-      rowMode: 'object',
-      callback: (ev: { row?: unknown; rowNumber?: number | null }) => {
-        if (ev.row !== undefined) {
-          rows.push(ev.row as T);
-        }
-      },
-      returnValue: 'this'
+      returnValue: 'this',
+      __collectRows: true
     } as any).catch((e: unknown) => {
       throw toSqliteWasmError(e);
     });
+    const rows = ((msg as any).result?.resultRows ?? []) as T[];
     return rows;
   };
 
@@ -125,7 +110,14 @@ export async function createDatabase(opts: OpenOptions): Promise<Database> {
 
     run: (sql, bind) =>
       enqueue(async () => {
-        const msg = await promiser('exec', { dbId, sql, bind, returnValue: 'this' } as any).catch((e: unknown) => {
+        const msg = await promiser('exec', {
+          dbId,
+          sql,
+          bind,
+          returnValue: 'this',
+          countChanges: true,
+          lastInsertRowId: true
+        } as any).catch((e: unknown) => {
           throw toSqliteWasmError(e);
         });
         const res: any = (msg as any).result ?? {};

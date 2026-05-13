@@ -1,6 +1,6 @@
 # sqlite-promiser
 
-Async SQLite in the browser via **`@sqlite.org/sqlite-wasm`** Worker1 **promiser** (SQLite runs in a worker; your app uses `await` on the main thread).
+Async SQLite in the browser via **`@sqlite.org/sqlite-wasm`** loaded with **`sqlite3InitModule()`** and **OO API #1** inside a small dedicated worker (see [SQLite WASM loading](https://sqlite.org/wasm/doc/trunk/api-index.md#loading)). Your app still uses `await` on the main thread; the deprecated Worker1 promiser is not used.
 
 - **OPFS** — when `crossOriginIsolated` is true **and** `navigator.storage.getDirectory` exists (typical with COOP/COEP headers).
 - **Fallback** — **in-memory** SQLite (session-only) when isolation or OPFS is unavailable.
@@ -13,7 +13,7 @@ pnpm add sqlite-promiser @sqlite.org/sqlite-wasm
 
 `@sqlite.org/sqlite-wasm` is a **peer dependency** of `sqlite-promiser`, so your app controls which SQLite WASM version is used (install any compatible version you prefer).
 
-The worker and WASM load from `@sqlite.org/sqlite-wasm` as resolved by your bundler (see [WA-SQL gotchas](https://sqlite.org/wasm/doc/tip/gotchas.md)).
+The build emits **`dist/sqlite-oo1-worker.js`** (bundled `sqlite3InitModule()` + OO1 RPC) and copies **`dist/sqlite3.wasm`** next to it so the default worker can fetch WASM from the same directory. Subpath exports **`sqlite-promiser/worker`** and **`sqlite-promiser/sqlite3.wasm`** mirror those files for static hosting or `require.resolve()` in asset pipelines. Override with your own worker when your host needs a different layout (see [gotchas](https://sqlite.org/wasm/doc/tip/gotchas.md)).
 
 ## Quick start
 
@@ -127,13 +127,13 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-Copy or expose `sqlite3.wasm` from `node_modules/@sqlite.org/sqlite-wasm/dist/` if your deploy pipeline requires explicit static assets.
+Copy **`sqlite3.wasm`** from `node_modules/@sqlite.org/sqlite-wasm/dist/` when your deploy pipeline requires explicit static assets, and (for Next.js-style setups) the built **`sqlite-oo1-worker.js`** from `node_modules/sqlite-promiser/dist/` so `?sqlite3.wasm=` on the worker URL can point at your public WASM URL.
 
 ### Plain JS / other bundlers
 
 1. Install `sqlite-promiser` and `@sqlite.org/sqlite-wasm`.
 2. Configure **COOP/COEP** on the HTML origin when you need OPFS.
-3. Ensure the worker can resolve `sqlite3-worker1.mjs` / `sqlite3.wasm` (same-origin or correct base URL).
+3. Ensure **`sqlite-oo1-worker.js`** and **`sqlite3.wasm`** are same-origin (or pass `?sqlite3.wasm=` on the worker script URL). The default worker URL is `./sqlite-oo1-worker.js` next to the published library entry.
 
 ## React
 
@@ -165,7 +165,7 @@ export function Demo() {
 - `name` — logical DB name (sanitized for filenames).
 - `preferOpfs` — default `true`.
 - `fallback` — `'memory'` (default; IndexedDB planned separately).
-- `vfs` — optional Worker1 `vfs` override for advanced setups.
+- `vfs` — optional VFS override for the worker `open` step (advanced).
 - `worker` — optional custom `Worker` factory.
 
 ## Testing this repo

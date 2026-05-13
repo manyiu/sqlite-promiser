@@ -2,7 +2,7 @@
 
 Async SQLite in the browser with **OPFS persistence when available** and a **safe in-memory fallback**.
 
-`sqlite-promiser` is a small wrapper around [`@sqlite.org/sqlite-wasm`](https://www.npmjs.com/package/@sqlite.org/sqlite-wasm) (Worker1 promiser) that makes it easy to:
+`sqlite-promiser` is a small wrapper around [`@sqlite.org/sqlite-wasm`](https://www.npmjs.com/package/@sqlite.org/sqlite-wasm) that loads SQLite with [`sqlite3InitModule()`](https://sqlite.org/wasm/doc/trunk/api-index.md#loading) and **OO API #1** in a dedicated worker (not the deprecated Worker1 promiser), so you can:
 
 - prefer **OPFS** (Origin Private File System) for persistence in cross-origin isolated contexts
 - automatically fall back to **in-memory** SQLite when OPFS/isolation isn’t available
@@ -207,7 +207,7 @@ const db = await createDatabase({
 - `name` (string, required): logical database name (used as OPFS filename when persistence is enabled)
 - `preferOpfs` (boolean, default `true`): if `true`, try OPFS when supported
 - `fallback` (`'memory'`, default `'memory'`): fallback when OPFS cannot be used
-- `vfs` (string, optional): override the SQLite VFS name passed to Worker1 `open` (advanced)
+- `vfs` (string, optional): override the SQLite VFS name passed to the worker `open` step (advanced)
 - `worker` (`Worker | (() => Worker)`, optional): provide your own Worker instance/factory (advanced)
 
 ### `describeEnvironment()`

@@ -23,7 +23,7 @@ export function memoryFilename(name: string): string {
 }
 
 /**
- * Build Worker1 `open` payload: sanitized filename and optional explicit `vfs`.
+ * Build worker `open` payload: sanitized filename and optional explicit `vfs`.
  *
  * When {@link OpenOptions.vfs options.vfs} is set it is forwarded; otherwise OPFS targets use {@link opfsFilename}
  * and non-OPFS paths use {@link memoryFilename}.

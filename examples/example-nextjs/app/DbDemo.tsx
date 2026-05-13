@@ -7,13 +7,7 @@ import type { Database } from 'sqlite-promiser';
 type Row = { id: number; v: string };
 
 function createSqliteWorker(): Worker {
-  /**
-   * Next/webpack can cause sqlite-wasm to resolve its WASM URL to a `file://`
-   * path. We instead serve worker+wasm from `/public` and tell sqlite-wasm where
-   * to fetch `sqlite3.wasm` via a query parameter (supported by sqlite-wasm's
-   * locateFile()).
-   */
-  const url = new URL('/sqlite3-worker1.mjs', window.location.origin);
+  const url = new URL('/sqlite-oo1-worker.js', window.location.origin);
   url.searchParams.set('sqlite3.wasm', '/sqlite3.wasm');
   return new Worker(url, { type: 'module' });
 }

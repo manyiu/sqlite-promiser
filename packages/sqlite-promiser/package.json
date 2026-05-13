@@ -46,7 +46,9 @@
       "import": "./dist/headers.js",
       "require": "./dist/headers.cjs",
       "default": "./dist/headers.js"
-    }
+    },
+    "./worker": "./dist/sqlite-oo1-worker.js",
+    "./sqlite3.wasm": "./dist/sqlite3.wasm"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -57,7 +59,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node ./scripts/strip-worker1-url.mjs && node ./scripts/copy-sqlite-wasm.mjs",
     "lint": "eslint .",
     "docs:ref": "typedoc",
     "test": "vitest run",

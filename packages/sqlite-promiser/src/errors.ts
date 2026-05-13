@@ -1,5 +1,5 @@
 /**
- * Normalized failure from the `@sqlite.org/sqlite-wasm` Worker1 bridge.
+ * Normalized failure from the SQLite WASM worker bridge.
  *
  * Wraps unstructured worker errors while preserving upstream `operation`, `errorClass`, and `input` when present.
  */
@@ -30,7 +30,7 @@ function asRecord(v: unknown): Record<string, unknown> | undefined {
 /**
  * Coerce any thrown value into {@link SqliteWasmError}.
  *
- * Recognizes Worker1 `{ result: { operation, message, ... } }` shapes produced by `@sqlite.org/sqlite-wasm`.
+ * Recognizes `{ result: { operation, message, ... } }` shapes from worker RPC errors.
  *
  * @param err Unknown rejection or throw value from the WASM layer or this library.
  * @returns A stable subclass instance preserving metadata when inferable.

@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "assets": "node ./scripts/copy-sqlite-wasm-assets.mjs",
+    "assets": "pnpm --filter sqlite-promiser build && node ./scripts/copy-sqlite-wasm-assets.mjs",
     "dev": "pnpm assets && next dev",
     "build": "pnpm assets && next build",
     "start": "next start"

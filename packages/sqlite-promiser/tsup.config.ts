@@ -20,6 +20,19 @@ export default defineConfig([
       return format === 'cjs' ? { js: '.cjs' } : { js: '.js' };
     },
     external: ['react', '@sqlite.org/sqlite-wasm']
+  },
+  {
+    entry: { 'sqlite-oo1-worker': 'src/worker/sqliteOo1Worker.ts' },
+    format: ['esm'],
+    platform: 'browser',
+    target: 'es2022',
+    sourcemap: true,
+    clean: false,
+    splitting: false,
+    treeshake: true,
+    outDir: 'dist',
+    dts: false,
+    noExternal: ['@sqlite.org/sqlite-wasm']
   }
 ]);
 
