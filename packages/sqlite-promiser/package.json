@@ -90,5 +90,9 @@
     "react": {
       "optional": true
     }
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   }
 }
