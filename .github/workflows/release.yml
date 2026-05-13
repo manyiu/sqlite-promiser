@@ -10,6 +10,10 @@
 # Local / manual publishes use `npm publish` with your npm account (OTP or token as you configure).
 #
 # Baseline `v*` git tags keep semantic-release history sane (avoid one giant first automated bump).
+#
+# If CI fails with `fatal: tag 'vX.Y.Z' already exists`, tags on GitHub may point at commits no longer on
+# `main` (e.g. after `git filter-repo` / force-push). semantic-release then tries to recreate the same tag.
+# Fix: `git tag -f vX.Y.Z <commit-on-main>` then `git push --force origin refs/tags/vX.Y.Z`.
 
 name: Release
 
