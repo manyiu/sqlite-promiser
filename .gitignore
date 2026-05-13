@@ -35,6 +35,9 @@ packages/sqlite-promiser/docs/reference/
 
 # Next.js
 .next/
+# example-nextjs: copied from @sqlite.org/sqlite-wasm + sqlite-promiser build (see pnpm assets)
+examples/example-nextjs/public/sqlite3.wasm
+examples/example-nextjs/public/sqlite3-opfs-async-proxy.js
 examples/example-nextjs/public/sqlite-oo1-worker.js
 
 # Vite / Rollup / misc caches
