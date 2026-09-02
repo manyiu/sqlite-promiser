@@ -49,7 +49,9 @@ function defaultModuleArg(): Record<string, unknown> {
 
 async function ensureInit(): Promise<void> {
   if (!initPromise) {
-    initPromise = sqlite3InitModule({ ...defaultModuleArg() } as any);
+    initPromise = (sqlite3InitModule as (config?: Record<string, unknown>) => Promise<unknown>)(
+      { ...defaultModuleArg() }
+    );
   }
   sqlite3 = await initPromise;
 }

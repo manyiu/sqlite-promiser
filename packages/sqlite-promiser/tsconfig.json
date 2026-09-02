@@ -13,6 +13,8 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "verbatimModuleSyntax": true,
+    // tsup DTS (rollup-plugin-dts) hits TS5101 on a transitive baseUrl deprecation; see egoist/tsup#1408.
+    "ignoreDeprecations": "6.0",
     "types": []
   },
   "include": ["src", "e2e", "vitest.config.ts", "tsup.config.ts", "playwright.config.ts"]
