@@ -41,7 +41,7 @@ jobs:
     if: ${{ github.event.head_commit == null || !contains(github.event.head_commit.message, '[skip ci]') }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -49,7 +49,7 @@ jobs:
         run: corepack enable pnpm
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           # Pin major 24 (latest 24.x.y on the runner; npm 11.x for Trusted Publishing OIDC).
           node-version: '24'
