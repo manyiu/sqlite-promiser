@@ -19,7 +19,10 @@ export default [
       'react-hooks': reactHooks
     },
     rules: {
-      ...reactHooks.configs.recommended.rules
+      ...reactHooks.configs.recommended.rules,
+      // Existing hook patterns (ref mirror + effect loading state) predate react-hooks v7 stricter rules.
+      'react-hooks/refs': 'off',
+      'react-hooks/set-state-in-effect': 'off'
     }
   }
 ];

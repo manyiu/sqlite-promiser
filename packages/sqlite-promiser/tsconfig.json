@@ -13,6 +13,7 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "verbatimModuleSyntax": true,
+    "ignoreDeprecations": "6.0",
     "types": []
   },
   "include": ["src", "e2e", "vitest.config.ts", "tsup.config.ts", "playwright.config.ts"]
